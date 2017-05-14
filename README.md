@@ -1,7 +1,11 @@
-# Open Air Quality Rust Client
+# OpenAQ Client
 
-Rust API Client for [Open Air Quality](https://openaq.org)
+Unofficial Open Air Quality API Client written in Rust. This is still work in progress. You can check the [examples](./examples) and the following links:
+
+- [Open Air Quality](https://openaq.org)
+- [Docs](https://igncp.github.io/openaq-client/doc/openaq_client)
+- [Crate](https://crates.io/crates/openaq-client)
 
 ## License
 
-MIT - 2017, Ignacio Carbajo
+MIT - Ignacio Carbajo
