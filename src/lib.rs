@@ -62,20 +62,20 @@ pub struct GetCitiesQueryOpts<'a> {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct City {
+    pub count: u32,
+    pub country: String,
+    pub locations: u32,
     #[serde(rename = "city")]
-    name: String,
-    count: u32,
-    country: String,
-    locations: u32,
+    pub name: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Parameter {
-    description: String,
-    id: String,
-    name: String,
+    pub description: String,
+    pub id: String,
+    pub name: String,
     #[serde(rename = "preferredUnit")]
-    preferred_unit: String,
+    pub preferred_unit: String,
 }
 
 macro_rules! extract_results {
