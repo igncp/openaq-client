@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["CITIES",""]]});
+initSidebarItems({"constant":[["CITIES",""],["PARAMETERS",""]]});

@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["get_cities",""]],"mod":[["json",""]],"struct":[["City",""],["GetCitiesQueryOpts",""]]});
+initSidebarItems({"fn":[["get_cities",""],["get_parameters",""]],"mod":[["json",""]],"struct":[["City",""],["GetCitiesQueryOpts",""],["Parameter",""]]});
