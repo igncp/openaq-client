@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+git merge --no-edit master
+
+rm -rf target
+
 cargo doc --no-deps
 
 rm -rf doc
