@@ -17,6 +17,7 @@ pub mod json {
 
     pub mod requests {
         pub const CITIES: &str = "/v1/cities";
+        pub const PARAMETERS: &str = "/v1/parameters";
     }
 
     pub struct GetOpts {
@@ -69,8 +70,25 @@ pub struct City {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct RequestResult {
-    results: Vec<City>,
+pub struct Parameter {
+    description: String,
+    id: String,
+    name: String,
+    #[serde(rename = "preferredUnit")]
+    preferred_unit: String,
+}
+
+macro_rules! extract_results {
+    ($T: ty, $endpoint: expr, $opts: expr) => {
+        #[derive(Debug, Serialize, Deserialize)]
+        struct RequestResult {
+            results: Vec<$T>,
+        }
+        let result = json::get($endpoint, $opts);
+        let v: RequestResult = serde_json::from_str(&result).unwrap();
+
+        return v.results;
+    };
 }
 
 pub fn get_cities(cities_query_opts: Option<GetCitiesQueryOpts>) -> Vec<City> {
@@ -82,10 +100,10 @@ pub fn get_cities(cities_query_opts: Option<GetCitiesQueryOpts>) -> Vec<City> {
             Some(opts)
         }
     };
-    let result = json::get(json::requests::CITIES, get_opts);
 
+    extract_results!(City, json::requests::CITIES, get_opts);
+}
 
-    let v: RequestResult = serde_json::from_str(&result).unwrap();
-
-    return v.results;
+pub fn get_parameters() -> Vec<Parameter> {
+    extract_results!(Parameter, json::requests::PARAMETERS, None);
 }
