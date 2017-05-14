@@ -1,0 +1,10 @@
+[package]
+name = "basic"
+version = "0.1.0"
+authors = ["Ignacio Carbajo <icarbajop@gmail.com>"]
+
+[dependencies]
+serde_json = "1.0.2"
+
+[dependencies.openaq-client]
+path = "../../"
