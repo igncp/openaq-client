@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["get",""],["get_cities_query",""]],"mod":[["requests",""]],"struct":[["GetOpts",""]]});
+initSidebarItems({"fn":[["get",""],["get_cities_query",""],["get_countries_query",""],["get_fetches_query",""]],"mod":[["requests",""]],"struct":[["GetOpts",""]]});

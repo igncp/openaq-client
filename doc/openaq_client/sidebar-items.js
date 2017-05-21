@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["get_cities",""],["get_parameters",""]],"mod":[["json",""]],"struct":[["City",""],["GetCitiesQueryOpts",""],["Parameter",""]]});
+initSidebarItems({"fn":[["get_cities",""],["get_countries",""],["get_fetches",""],["get_parameters",""]],"mod":[["json",""]],"struct":[["City",""],["Country",""],["Fetch",""],["FetchResult",""],["GetCitiesQueryOpts",""],["GetCountriesQueryOpts",""],["GetFetchesQueryOpts",""],["Parameter",""]]});
