@@ -7,6 +7,9 @@ extern crate serde_json;
 
 static URL: &'static str = "http://api.openaq.org";
 
+mod entities;
+pub use entities::*;
+
 pub mod json {
     use hyper::Client;
     use hyper::net::HttpsConnector;
@@ -17,7 +20,9 @@ pub mod json {
 
     pub mod requests {
         pub const CITIES: &str = "/v1/cities";
+        pub const COUNTRIES: &str = "/v1/countries";
         pub const PARAMETERS: &str = "/v1/parameters";
+        pub const FETCHES: &str = "/v1/fetches";
     }
 
     pub struct GetOpts {
@@ -29,11 +34,18 @@ pub mod json {
                &opts.limit.to_string() + "&country=" + opts.country;
     }
 
+    pub fn get_countries_query(opts: GetCountriesQueryOpts) -> String {
+        return String::from("page=") + &opts.page.to_string() + "&limit=" + &opts.limit.to_string();
+    }
+
+    pub fn get_fetches_query(opts: GetFetchesQueryOpts) -> String {
+        return String::from("page=") + &opts.page.to_string() + "&limit=" + &opts.limit.to_string();
+    }
+
     pub fn get(req: &str, opts: Option<GetOpts>) -> String {
         let ssl = NativeTlsClient::new().unwrap();
         let connector = HttpsConnector::new(ssl);
         let client = Client::with_connector(connector);
-
         let full_url = match &opts {
             &None => String::from(URL) + req,
             &Some(ref o) => {
@@ -60,22 +72,14 @@ pub struct GetCitiesQueryOpts<'a> {
     pub country: &'a str,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct City {
-    pub count: u32,
-    pub country: String,
-    pub locations: u32,
-    #[serde(rename = "city")]
-    pub name: String,
+pub struct GetCountriesQueryOpts {
+    pub page: u32,
+    pub limit: u32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Parameter {
-    pub description: String,
-    pub id: String,
-    pub name: String,
-    #[serde(rename = "preferredUnit")]
-    pub preferred_unit: String,
+pub struct GetFetchesQueryOpts {
+    pub page: u32,
+    pub limit: u32,
 }
 
 macro_rules! extract_results {
@@ -91,17 +95,46 @@ macro_rules! extract_results {
     };
 }
 
+macro_rules! extract_results_with_opts {
+    ($get_query: expr, $T: ty, $endpoint: expr, $opts: expr) => {
+        let get_opts = match $opts {
+            None => None,
+            Some(o) => {
+                let query = $get_query(o);
+                let opts = json::GetOpts { query: Some(query) };
+                Some(opts)
+            }
+        };
+
+        extract_results!($T, $endpoint, get_opts);
+    };
+}
+
 pub fn get_cities(cities_query_opts: Option<GetCitiesQueryOpts>) -> Vec<City> {
-    let get_opts = match cities_query_opts {
+    extract_results_with_opts!(json::get_cities_query,
+                               City,
+                               json::requests::CITIES,
+                               cities_query_opts);
+}
+
+pub fn get_fetches(fetches_query_opts: Option<GetFetchesQueryOpts>) -> Vec<Fetch> {
+    extract_results_with_opts!(json::get_fetches_query,
+                               Fetch,
+                               json::requests::FETCHES,
+                               fetches_query_opts);
+}
+
+pub fn get_countries(countries_query_opts: Option<GetCountriesQueryOpts>) -> Vec<Country> {
+    let get_opts = match countries_query_opts {
         None => None,
         Some(o) => {
-            let cities_query = json::get_cities_query(o);
-            let opts = json::GetOpts { query: Some(cities_query) };
+            let countries_query = json::get_countries_query(o);
+            let opts = json::GetOpts { query: Some(countries_query) };
             Some(opts)
         }
     };
 
-    extract_results!(City, json::requests::CITIES, get_opts);
+    extract_results!(Country, json::requests::COUNTRIES, get_opts);
 }
 
 pub fn get_parameters() -> Vec<Parameter> {
